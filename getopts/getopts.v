@@ -230,7 +230,7 @@ pub fn (cmd Cmd_line) option_value(name string) string {
 }
 
 pub fn (mut cmd Cmd_line) parse(args []string) ? {
-    mut local_args := args
+    mut local_args := args.clone()
     if local_args.len == 0 {
         return error('empty argument array')
     }
@@ -245,9 +245,7 @@ pub fn (mut cmd Cmd_line) parse(args []string) ? {
             break
         }
 
-        c1 := this_arg[0]
-        c2 := this_arg[1]
-        is_short := this_arg.len == 2 && c1 == 45 && c2 != 45
+        is_short := this_arg.len == 2 && this_arg[0] == 45 && this_arg[1] != 45
         is_long := this_arg.len > 2 && this_arg[0..2] == '--'
 
         if is_short || is_long {

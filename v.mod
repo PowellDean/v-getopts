@@ -1,6 +1,6 @@
 Module {
 	name: 'getopts'
-	description: ''
-	version: '0.0.0'
+	description: 'A simple command line parser written in V'
+	version: '0.1.0'
 	dependencies: []
 }
