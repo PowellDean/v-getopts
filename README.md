@@ -67,6 +67,7 @@ fn main() {
         val := ncl.option_value('s')
         println('You set option -s/--skip: $val')
     }
+}
 ```
 
 Afer compiling, invoke the program like this:
