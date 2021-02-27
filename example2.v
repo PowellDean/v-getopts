@@ -2,9 +2,21 @@ import getopts
 import os
 
 fn main() {
-    mut ncl := getopts.new_cmd_line()
-    ncl.add_command("add", "Add an entity to something")
-    ncl.add_command("list", "List all current entries")
+    mut ncl := getopts.new_cmd_line() or {
+        println(err)
+        exit(8)
+    }
+
+    ncl.add_command("add", "Add an entity to something") or {
+        println(err)
+        exit(8)
+    }
+
+    ncl.add_command("list", "List all current entries") or {
+        println(err)
+        exit(8)
+    }
+
     ncl.parse(os.args) or {
         println(err)
         exit(8)
@@ -21,9 +33,21 @@ fn main() {
 }
 
 fn run_command(args []string) {
-    mut nc2 := getopts.new_cmd_line()
-    nc2.add_argument('program', 'a program name')
-    nc2.parse(args)
+    mut nc2 := getopts.new_cmd_line() or {
+        println(err)
+        exit(8)
+    }
+
+    nc2.add_argument('program', 'a program name') or {
+        println(err)
+        exit(8)
+    }
+
+    nc2.parse(args) or {
+        println(err)
+        exit(8)
+    }
+
 	av := nc2.argument_value('program') or {
 		println(err)
 		exit(8)

@@ -106,7 +106,14 @@ OPTIONS
 -s, --skip <x>  Option with long and short forms
 ```
 
+## Required Compiler Version
+
+The module and example programs were built with __V 0.2.2 bf6e9ff__. We
+cannot guarantee successful compilation with earlier versions.
+
 ## Contact
 
 If you have ideas, questions, or criticisms, email me at
 PowellDean@gmail.com
+
+Have a contribution? Pull requests are welcome!

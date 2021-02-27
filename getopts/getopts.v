@@ -3,7 +3,7 @@ module getopts
 // values, arguments, and subcommands.
 
 /*
-Copyright © 2020 Dean Powell <PowellDean@gmail.com>
+Copyright © 2020-2021 Dean Powell <PowellDean@gmail.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the “Software”), to deal
@@ -77,9 +77,12 @@ pub struct Cmd_line {
 
 // new_cmd_line creates a new, initialized Cmd_line. Use this function instead
 // of defining a Cmd_line yourself
-pub fn new_cmd_line() Cmd_line {
+pub fn new_cmd_line() ?Cmd_line {
     mut cloption := Cmd_line{}
-    cloption.add_flag('h', 'help', 'print help and exit')
+    cloption.add_flag('h', 'help', 'print help and exit') or {
+        return error(err)
+    }
+
     return cloption
 }
 
@@ -97,7 +100,9 @@ pub fn (mut cmd Cmd_line) add_argument(new_name string, desc string) ? {
 
 pub fn (mut cmd Cmd_line) add_command(cmd_name string, desc string) ? {
     if cmd.arguments.len == 0 {
-        cmd.add_argument('command', 'the command to execute')
+        cmd.add_argument('command', 'the command to execute') or {
+            return error(err)
+        }
     } else {
         if cmd.arguments[0].name != "command" {
             return error('Cannot have both arguments and commands')
@@ -148,14 +153,22 @@ pub fn (mut cmd Cmd_line) add_option(
     }
 }
 
+// argument_value returns the value assigned to the given argument at runtime.
+// Arguments cannot be blank, so if after iterating through all arguments we
+// don't find the argument name we're looking for, throw an error
 pub fn (cmd Cmd_line) argument_value(arg_name string) ?string {
+    mut return_string := ''
     for this_arg in cmd.arguments {
         if this_arg.name == arg_name {
-            return this_arg.value
+            return_string = this_arg.value
         }
-
-        return error('Unknown argument $arg_name')
     }
+
+    if return_string == '' {
+        return error('unknown argument $arg_name')
+    }
+
+    return return_string
 }
 
 pub fn (cmd Cmd_line) command_name() ?string {
