@@ -7,12 +7,7 @@ fn main() {
         exit(8)
     }
 
-    ncl.add_command("add", "Add an entity to something") or {
-        println(err)
-        exit(8)
-    }
-
-    ncl.add_command("list", "List all current entries") or {
+    ncl.add_command("add", "Add something") or {
         println(err)
         exit(8)
     }
@@ -21,36 +16,40 @@ fn main() {
         println(err)
         exit(8)
     }
-    _ := ncl.command_name() or {
+
+    cmd_name := ncl.command_name() or {
         println(err)
         exit(8)
     }
+
     a := ncl.command_name_and_arguments() or {
         println(err)
         exit(8)
     }
-    run_command(a)
+
+    if cmd_name == 'add' {
+        run_command(a)
+    }
 }
 
-fn run_command(args []string) {
+fn run_command(these_args []string) {
     mut nc2 := getopts.new_cmd_line() or {
         println(err)
         exit(8)
     }
 
-    nc2.add_argument('program', 'a program name') or {
+    nc2.add_option('p', 'program', 'pgmname','name of program to run') or {
         println(err)
         exit(8)
     }
 
-    nc2.parse(args) or {
+    nc2.parse(these_args) or {
         println(err)
         exit(8)
     }
 
-	av := nc2.argument_value('program') or {
-		println(err)
-		exit(8)
-	}
-	println(av)
+    if nc2.is_option_set('p') {
+        val := nc2.option_value('p')
+        println('For command add, you set option p to value: ${val}')
+    }
 }

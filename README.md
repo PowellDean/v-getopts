@@ -43,7 +43,7 @@ my_program --skip=3
 
 my_program -s3
 
-## Usage
+## General Usage
 
 Here is a typical (short) program:
 
@@ -106,6 +106,86 @@ OPTIONS
 -s, --skip <x>  Option with long and short forms
 ```
 
+## Handling Commands
+
+Handling commands is a little bit clunky at the moment, due to optional return
+values from some functions having to be processed. We may try to clean this up,
+but as of now, the module _does_ handle command processing.
+
+If you need to process a command like this:
+
+```bash
+my_program add -p FOO
+```
+
+The short-ish program below should do the trick:
+
+```v
+import getopts
+import os
+
+fn main() {
+    mut ncl := getopts.new_cmd_line() or {
+        println(err)
+        exit(8)
+    }
+
+    ncl.add_command("add", "Add something") or {
+        println(err)
+        exit(8)
+    }
+
+    ncl.parse(os.args) or {
+        println(err)
+        exit(8)
+    }
+
+    cmd_name := ncl.command_name() or {
+        println(err)
+        exit(8)
+    }
+
+    a := ncl.command_name_and_arguments() or {
+        println(err)
+        exit(8)
+    }
+
+    if cmd_name == 'add' {
+        run_command(a)
+    }
+}
+
+fn run_command(these_args []string) {
+    mut nc2 := getopts.new_cmd_line() or {
+        println(err)
+        exit(8)
+    }
+
+    nc2.add_option('p', 'program', 'pgmname','name of program to run') or {
+        println(err)
+        exit(8)
+    }
+
+    nc2.parse(these_args) or {
+        println(err)
+        exit(8)
+    }
+
+    if nc2.is_option_set('p') {
+        val := nc2.option_value('p')
+        println('For command add, you set option p to value: ${val}')
+    }
+}
+```
+
+
+After compilation, running the program as shown above would produce this
+result:
+
+```
+For command add, you set option p to value: FOO
+```
+
 ## Required Compiler Version
 
 The module and example programs were built with __V 0.2.2 bf6e9ff__. We
@@ -116,4 +196,6 @@ cannot guarantee successful compilation with earlier versions.
 If you have ideas, questions, or criticisms, email me at
 PowellDean@gmail.com
 
-Have a contribution? Pull requests are welcome!
+## Contributing??
+
+Have a contribution? Pull requests are **ALWAYS** welcome!
