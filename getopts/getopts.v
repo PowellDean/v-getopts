@@ -80,7 +80,7 @@ pub struct Cmd_line {
 pub fn new_cmd_line() ?Cmd_line {
     mut cloption := Cmd_line{}
     cloption.add_flag('h', 'help', 'print help and exit') or {
-        return error(err)
+        return err
     }
 
     return cloption
@@ -94,14 +94,14 @@ pub fn (mut cmd Cmd_line) add_argument(new_name string, desc string) ? {
     }
 
     cmd.new_argument(this_arg) or {
-        return error(err)
+        return err
     }
 }
 
 pub fn (mut cmd Cmd_line) add_command(cmd_name string, desc string) ? {
     if cmd.arguments.len == 0 {
         cmd.add_argument('command', 'the command to execute') or {
-            return error(err)
+            return err
         }
     } else {
         if cmd.arguments[0].name != "command" {
@@ -149,7 +149,7 @@ pub fn (mut cmd Cmd_line) add_option(
         description: desc}
 
     cmd.new_option(this_opt) or {
-        return error(err)
+        return err
     }
 }
 
