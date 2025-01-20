@@ -1,6 +1,4 @@
-module main
-
-import getopts
+import powelldean.getopts
 import os
 
 fn main() {

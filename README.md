@@ -1,3 +1,5 @@
+[![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+
 # Getopts
 
 ## Introduction
@@ -49,7 +51,7 @@ Here is a typical (short) program:
 
 ```v
 import os
-import getopts
+import powelldean.getopts
 
 fn main() {
     mut ncl := getopts.new_cmd_line()
@@ -121,7 +123,7 @@ my_program add -p FOO
 The short-ish program below should do the trick:
 
 ```v
-import getopts
+import powelldean.getopts
 import os
 
 fn main() {
