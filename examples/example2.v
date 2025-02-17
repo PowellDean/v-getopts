@@ -1,0 +1,50 @@
+import powelldean.getopts
+import os
+
+fn main() {
+    mut ncl := getopts.new_cmd_line() or {
+        println("Could not instantiate getopts. Sorry. I hate myself")
+        return
+    }
+    ncl.add_command("add", "Add an entity to something") or {
+        println('BUG1')
+        return
+    }
+    ncl.add_command("list", "List all current entries") or {
+        println('BUG2')
+        return
+    }
+    ncl.parse(os.args) or {
+        println(err)
+        exit(8)
+    }
+    _ := ncl.command_name() or {
+        println(err)
+        exit(8)
+    }
+    a := ncl.command_name_and_arguments() or {
+        println(err)
+        exit(8)
+    }
+    run_command(a)
+}
+
+fn run_command(args []string) {
+    mut nc2 := getopts.new_cmd_line() or {
+        println('BUG3')
+        exit(8)
+    }
+    nc2.add_argument('program', 'a program name') or {
+        println('BUG4')
+        exit(8)
+    }
+    nc2.parse(args) or {
+        println('BUG5')
+        exit(8)
+    }
+	av := nc2.argument_value('program') or {
+		println(err)
+		exit(8)
+	}
+	println(av)
+}
