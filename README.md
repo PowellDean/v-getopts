@@ -190,7 +190,7 @@ For command add, you set option p to value: FOO
 
 ## Required Compiler Version
 
-The module and example programs were built with __V 0.2.4 47313cb__. We
+The module and example programs were built with __V 0.4.8 5f413f4__. We
 cannot guarantee successful compilation with earlier versions.
 
 ## Contact
