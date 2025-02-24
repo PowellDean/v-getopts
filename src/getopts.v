@@ -278,19 +278,13 @@ pub fn (mut cmd Cmd_line) parse(args []string) ! {
             mut this_option := cmd.options[key]
             this_option.set = true
 
-            if this_option.value_string == '' {
-                local_args = local_args[1..].clone()
-                cmd.options[key] = this_option
-                cmd.options[key1] = this_option
-            } else {
-                if local_args.len < 2 {
-                    return error('Missing value for option $key')
-                }
-                this_option.value = local_args[1]
-                local_args = local_args[2..].clone()
-                cmd.options[key] = this_option
-                cmd.options[key1] = this_option
-            }
+			if local_args.len < 2 {
+				return error('Missing value for option $key')
+			}
+			this_option.value = local_args[1]
+			local_args = local_args[2..].clone()
+			cmd.options[key] = this_option
+			cmd.options[key1] = this_option
         } else {
             // first argument
             break
@@ -334,7 +328,7 @@ pub fn (mut cmd Cmd_line) parse(args []string) ! {
                 return error('Unknown command $cmd.command')
             }
         } else if local_args.len > 0 {
-            return error('Invalid extra argument(s)')
+            return error('Invalid extra argument(s)...${local_args}')
         }
     }
 }
