@@ -245,6 +245,10 @@ pub fn (mut cmd Cmd_line) parse(args []string) ! {
 
     cmd.program_name = args[0]
     local_args = local_args[1..].clone()
+    if local_args[0] == '-h' || local_args[0] == '--help' {
+        cmd.print_usage()
+        exit(0)
+    }
 
     for local_args.len > 0 {
         this_arg := local_args[0]
