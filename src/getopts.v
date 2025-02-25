@@ -73,6 +73,7 @@ pub struct Cmd_line {
 pub fn new_cmd_line() !Cmd_line {
     mut cloption := Cmd_line{}
     cloption.add_flag('h', 'help', 'print help and exit') or {
+        println('Failed to initialize getopts.new_cmd_line: ${err}')
         return err
     }
 
@@ -94,6 +95,7 @@ pub fn (mut cmd Cmd_line) add_argument(new_name string, desc string) ! {
 pub fn (mut cmd Cmd_line) add_command(cmd_name string, desc string) ! {
     if cmd.arguments.len == 0 {
         cmd.add_argument('command', 'the command to execute') or {
+            println('Failed to getopts.add_command: ${err}')
             return err
         }
     } else {
@@ -121,7 +123,7 @@ pub fn (mut cmd Cmd_line) add_flag(short string, long string, desc string) ! {
         description: desc}
 
     cmd.new_option(new_option) or {
-        println(err)
+        println('Failed to getopts.add_flag: ${err}')
         return error('Could not add flag')
     }
 }
@@ -158,7 +160,7 @@ pub fn (cmd Cmd_line) argument_value(arg_name string) !string {
     }
 
     if return_string == '' {
-        return error('unknown argument $arg_name')
+        return error('unknown argument ${arg_name}')
     }
 
     return return_string
