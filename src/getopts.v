@@ -239,7 +239,7 @@ pub fn (cmd Cmd_line) option_value(name string) string {
 
 pub fn (mut cmd Cmd_line) parse(args []string) ! {
     mut local_args := args.clone()
-    if local_args.len == 0 {
+    if local_args.len < 2 {
         return error('empty argument array')
     }
 
