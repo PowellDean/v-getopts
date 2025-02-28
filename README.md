@@ -35,15 +35,15 @@ least one whitespace character, and not an equals sign (=). For example:
 
 **Will Work**
 
-my_program --skip 3
+my\_program --skip 3
 
 **Won't Work**
 
-my_program --skip=3
+my\_program --skip=3
 
 **Won't Work**
 
-my_program -s3
+my\_program -s3
 
 ## General Usage
 

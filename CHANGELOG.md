@@ -7,3 +7,9 @@
 ### Fixed
 
 - Now parses multiple command-line options correctly
+
+## [1.2.0] - 2025-02-27
+
+### Fixed
+
+- Now parses flag values correctly

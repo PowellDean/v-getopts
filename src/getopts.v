@@ -28,6 +28,7 @@ pub struct Opt {
         value_string  string
         description   string
         default       string
+        is_flag       bool
         set           bool
         value         string
 }
@@ -120,6 +121,7 @@ pub fn (mut cmd Cmd_line) add_flag(short string, long string, desc string) ! {
         short_name: short,
         long_name: long,
         value_string: '',
+        is_flag: true,
         description: desc}
 
     cmd.new_option(new_option) or {
@@ -141,6 +143,7 @@ pub fn (mut cmd Cmd_line) add_option(
         short_name: short,
         long_name: long,
         value_string: value,
+        is_flag: false,
         description: desc}
 
     cmd.new_option(this_opt) or {
@@ -237,6 +240,15 @@ pub fn (cmd Cmd_line) option_value(name string) string {
     return retval
 }
 
+// This is the main workhorse. Parse the options that are passed
+// in via the command line.
+//
+// We'll iterate through os.args[]. For each Option that
+// we process, we'll remove the first TWO arguments. An Option
+// that doesn't provide a value as a second argument will throw
+// an error. For each Flag, we only remove the first argument.
+// We keep removing aruments from the head (leftmost) until there
+// are no more.
 pub fn (mut cmd Cmd_line) parse(args []string) ! {
     mut local_args := args.clone()
     if local_args.len < 2 {
@@ -284,11 +296,16 @@ pub fn (mut cmd Cmd_line) parse(args []string) ! {
             mut this_option := cmd.options[key]
             this_option.set = true
 
-			if local_args.len < 2 {
-				return error('Missing value for option $key')
+            if this_option.is_flag {
+                local_args = local_args[1..].clone()
+            } else {
+                if local_args.len < 2 {
+                    return error('Missing value for option $key')
+                } else {
+                    this_option.value = local_args[1]
+                    local_args = local_args[2..].clone()
+                }
 			}
-			this_option.value = local_args[1]
-			local_args = local_args[2..].clone()
 			cmd.options[key] = this_option
 			cmd.options[key1] = this_option
         } else {
